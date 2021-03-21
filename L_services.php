@@ -482,7 +482,30 @@ Select price&nbsp;&nbsp;&nbsp; :-&nbsp;&nbsp;&nbsp; <input type="number" name="t
 </form>
      
   </div>
+<?php 
+  if(isset($_POST["remove_cat"]))
+  {
+  
+    //   if(!empty($_POST["cat_name"]) && !empty($_POST["cat_price"])){
+          
+          $cat_id = $_POST["category_id"];
+    //       $cat_price = $_POST["cat_price"];
+  
+      $query2 = "DELETE FROM category_selected WHERE category_id = '{$cat_id}'";
+      $result = mysqli_query($connect,$query2);
+  
+      if($result){
+          echo "<script type='text/javascript'>
+          alert('Successfully Removed');
+     </script>";
+      }
+      else {
+          echo "sasss";
+      }
+  
+  }
 
+?>
   <div class="row justify-content-center">
   <div style="background-color: #0a2e4f; color:white; width: 80%; clear:both">
 			<br />
@@ -496,7 +519,6 @@ Select price&nbsp;&nbsp;&nbsp; :-&nbsp;&nbsp;&nbsp; <input type="number" name="t
 					</tr>
 
 <?php 
-
 $total_cat = 0.0;
 $category_array = array();
 $query_fm = "SELECT * FROM category_selected INNER JOIN login on login.loginId = category_selected.user_id WHERE category_selected.user_id ='{$login_id}' AND category_selected.booked = '0' ";
@@ -510,10 +532,10 @@ if($fms){
         <td ><?php echo $fm['category_name'];?></td>
         <td>Rs.<?php echo $fm['category_price'];?>/=</td>
         <td class = "text-center" >
-                <form method="post" action="L_servicesBackCat.php">
-                <input type="hidden" name="category_id" value="1"></input>
-                <input type="hidden" name="user_id" value="1"></input>
-                    <button class="btn btn-danger" name="select_cat">remove</button>
+                <form method="post" action="L_services.php">
+                <input type="hidden" name="category_id" value=<?php echo $fm['category_id'];?>></input>
+                <input type="hidden" name="user_id" value=<?php echo $fm['user_id'];?>></input>
+                    <button class="btn btn-danger" name="remove_cat">remove</button>
                 </form>
             </td>
 </tr>

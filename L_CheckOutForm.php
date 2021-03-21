@@ -288,7 +288,30 @@ $con = mysqli_connect($dbServername, $dbUsername,$dbPassword,$dbName);
           <ul class="navbar-nav">
       </ul>
 </nav>
-    
+<?php 
+  if(isset($_POST["remove_cat"]))
+  {
+  
+    //   if(!empty($_POST["cat_name"]) && !empty($_POST["cat_price"])){
+          
+          $cat_id = $_POST["category_id"];
+    //       $cat_price = $_POST["cat_price"];
+  
+      $query2 = "DELETE FROM category_selected WHERE category_id = '{$cat_id}'";
+      $result = mysqli_query($connect,$query2);
+  
+      if($result){
+          echo "<script type='text/javascript'>
+          alert('Successfully Removed');
+     </script>";
+      }
+      else {
+          echo "sasss";
+      }
+  
+  }
+
+?>
 </div>
 <!--Nav Bar-->  
 <div class="container-fluid" style="box-shadow:3px 3px 3px 3px silver; margin: auto;
@@ -322,10 +345,10 @@ if($fms){
         <td ><?php echo $fm['category_name'];?></td>
         <td>Rs.<?php echo $fm['category_price'];?>/=</td>
         <td class = "text-center" >
-                <form method="post" action="L_servicesBackCat.php">
-                <input type="hidden" name="category_id" value="1"></input>
-                <input type="hidden" name="user_id" value="1"></input>
-                    <button class="btn btn-danger" name="select_cat">remove</button>
+        <form method="post" action="L_services.php">
+                <input type="hidden" name="category_id" value=<?php echo $fm['category_id'];?>></input>
+                <input type="hidden" name="user_id" value=<?php echo $fm['user_id'];?>></input>
+                    <button class="btn btn-danger" name="remove_cat">remove</button>
                 </form>
             </td>
 </tr>
