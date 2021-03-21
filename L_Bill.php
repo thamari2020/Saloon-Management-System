@@ -5,6 +5,12 @@ if(!isset($_SESSION['email'])){
   $email=$_SESSION['email'];
   header("location:./login.php");
 }
+
+$query_login = "select loginId from login where email = '{$_SESSION['email']}'";
+$login_res = mysqli_query($connect, $query_login);
+$row = mysqli_fetch_array($login_res);
+
+ $login_id = $row[0];
 ?>
 
 <HTML lang="en">
@@ -374,9 +380,9 @@ div1{
   <!-- Links -->
   <ul class="navbar-nav navbar-nav">
    
-    <li class="nav-item" >
+    <!-- <li class="nav-item" >
      <a class="nav-link active" href="L_Home.php">Home</a>
-    </li>
+    </li> -->
   </ul>
   
   
@@ -585,6 +591,33 @@ Full Name &nbsp;&nbsp;:- &nbsp;&nbsp;<?php echo $row['fName'];  ?> &nbsp;&nbsp;<
                 </td>
 
             </tr>
+            <?php 
+$total_cat = 0.0;
+$category_array = array();
+$query_fm = "SELECT * FROM category_selected INNER JOIN login on login.loginId = category_selected.user_id WHERE category_selected.user_id ='{$login_id}' AND category_selected.booked = '1' AND category_selected.done = '0' ";
+$fms = mysqli_query($con, $query_fm);
+if($fms){
+    while ($fm = mysqli_fetch_assoc($fms)) {
+      $total_cat = $total_cat + $fm['category_price'];
+      $category_array[] = $fm['category_selected'];
+?>
+<tr>
+        <td ><?php echo $fm['category_name'];?></td>
+        <td>Rs.<?php echo $fm['category_price'];?>/=</td>
+        <!-- <td class = "text-center" >
+                <form method="post" action="L_services.php">
+                <input type="hidden" name="category_id" value=<?php echo $fm['category_id'];?>></input>
+                <input type="hidden" name="user_id" value=<?php echo $fm['user_id'];?>></input>
+                    <button class="btn btn-danger" name="remove_cat">remove</button>
+                </form>
+            </td> -->
+</tr>
+
+<?php
+    }
+  }
+
+?>
 
             <?php
           $total = 0;
@@ -637,7 +670,8 @@ Full Name &nbsp;&nbsp;:- &nbsp;&nbsp;<?php echo $row['fName'];  ?> &nbsp;&nbsp;<
 
                 <td>
 
-                Rs <?php echo $values["fees"]; ?>
+                <!-- Rs <?php echo $values["fees"]; ?> -->
+                Rs.0/=
 
                 </td>
 
@@ -671,8 +705,8 @@ Full Name &nbsp;&nbsp;:- &nbsp;&nbsp;<?php echo $row['fName'];  ?> &nbsp;&nbsp;<
 
                 <td>
 
-                  Rs <?php echo $values["fees"]; ?>
-
+                  <!-- Rs <?php echo $values["fees"]; ?> -->
+                  Rs.0/=
                 </td>
 
             </tr>
@@ -693,7 +727,7 @@ Full Name &nbsp;&nbsp;:- &nbsp;&nbsp;<?php echo $row['fName'];  ?> &nbsp;&nbsp;<
 
                 <td>
 
-                   Rs. <?php echo number_format($total, 2); ?>
+                   Rs.<?php echo number_format($total_cat, 2); ?>/=
                 </td>
 
             </tr>
@@ -702,6 +736,34 @@ Full Name &nbsp;&nbsp;:- &nbsp;&nbsp;<?php echo $row['fName'];  ?> &nbsp;&nbsp;<
 <hr>
 <br>
 <B> Note :- If you want to cancel your booking you should inform within 7 days
+<?php 
+
+if(isset($_POST["update_cat"]))
+{ 
+  $update_selected = "UPDATE category_selected SET done='1' WHERE user_id = '{$login_id}'";
+  $cat_res = mysqli_query($connect, $update_selected);
+
+  if($cat_res){
+    echo '<script>window.location="http://localhost/salon/L_services.php"</script>'; 
+}
+else {
+    echo "sasss";
+}
+}
+?>
+
+
+
+<div class="row justify-content-center mt-3 mb-3">
+              <form method="POST" action="L_Bill.php">
+                <button class="btn btn-info" name="update_cat" >Go to Home Page</button>
+              </form>
+          </div>
+    </div>
+
+
+    <div class="container ">
+
     </div>
 <br/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>

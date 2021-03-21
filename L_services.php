@@ -521,7 +521,7 @@ Select price&nbsp;&nbsp;&nbsp; :-&nbsp;&nbsp;&nbsp; <input type="number" name="t
 <?php 
 $total_cat = 0.0;
 $category_array = array();
-$query_fm = "SELECT * FROM category_selected INNER JOIN login on login.loginId = category_selected.user_id WHERE category_selected.user_id ='{$login_id}' AND category_selected.booked = '0' ";
+$query_fm = "SELECT * FROM category_selected INNER JOIN login on login.loginId = category_selected.user_id WHERE category_selected.user_id ='{$login_id}' AND category_selected.booked = '0' AND category_selected.done = '0'";
 $fms = mysqli_query($con, $query_fm);
 if($fms){
     while ($fm = mysqli_fetch_assoc($fms)) {
