@@ -458,9 +458,75 @@ $con = mysqli_connect($dbServername, $dbUsername,$dbPassword,$ddName);
 <!--Nav Bar-->  
 
 <center>
+<div class="container">
+  <div class="row justify-content-center mt-3">
+  <form method="post" action="L_servicesBackCat.php">
+  <br/> <h1 class="mt-3 mb-3"><u>Our categories</u></h1>
+Select price &nbsp;&nbsp;&nbsp;:-&nbsp;&nbsp;&nbsp;<input type="number" name="txtStartprice">&nbsp;&nbsp;&nbsp;
+Select price&nbsp;&nbsp;&nbsp; :-&nbsp;&nbsp;&nbsp; <input type="number" name="txttEndPrice">
+<br ><br >
+<p>
+
+<input type="submit"  class="btn btn-success" name="search_categories" value="Search available categories">
+</p>
+</form>
+     
+  </div>
+
+  <div class="row justify-content-center">
+  <div style="background-color: #0a2e4f; color:white; width: 80%; clear:both">
+			<br />
+			<h3><u>Service Providers</u></h3>
+			<div class="table-responsive p-3">
+				<table style = "color:white;"class="table table-bordered">
+					<tr>
+						<th width="40%">Details</th>						
+						<th width="20%">Price</th>
+						<th width="15%">Action</th>
+					</tr>
+
+<?php 
+
+$total_cat = 0.0;
+$category_array = array();
+$query_fm = "SELECT * FROM category_selected";
+$fms = mysqli_query($con, $query_fm);
+if($fms){
+    while ($fm = mysqli_fetch_assoc($fms)) {
+      $total_cat = $total_cat + $fm['category_price'];
+      $category_array[] = $fm['category_selected'];
+?>
+<tr>
+        <td ><?php echo $fm['category_name'];?></td>
+        <td>Rs.<?php echo $fm['category_price'];?>/=</td>
+        <td class = "text-center" >
+                <form method="post" action="L_servicesBackCat.php">
+                <input type="hidden" name="category_id" value="1"></input>
+                <input type="hidden" name="user_id" value="1"></input>
+                    <button class="btn btn-danger" name="select_cat">remove</button>
+                </form>
+            </td>
+</tr>
+
+<?php
+    }
+  }
+
+?>
+
+<tr>
+						<th width="40%">Total</th>						
+						<th width="20%">Rs.<?php echo $total_cat; ?>/=</th>
+					</tr>
+            
+        </table>
+        </div>
+  </div>
+</div>
+<hr style=" border: solid 2px;margin-top:50px"/>
 <div style=" width: 80% ">
  
-                           <br/> <h1><u>Our Service</u></h1>
+                           <br/> <h1><u>select a barbar, consultant or beautician</u></h1>
                            
                     </div>
                     
@@ -481,10 +547,14 @@ die("Connection failed".mysqli_connect_error());
 if(isset ($_POST['search']))
 {
 	$txtStartDate=$_POST['txtStartDate'];
-	$txtEndDate=$_POST['txtEndDate'];
-	$query1= mysqli_query($connect ,"select  * from Babar where availabledate between '$txtStartDate' and '$txtEndDate' order by availabledate");
-		$query2= mysqli_query($connect ,"select  * from consultant where availabledate between '$txtStartDate' and '$txtEndDate' order by availabledate");
-		$query3= mysqli_query($connect ,"select  * from beautician where availabledate between '$txtStartDate' and '$txtEndDate' order by availabledate");
+	// $txtEndDate=$_POST['txtEndDate'];
+	  // $query1= mysqli_query($connect ,"select  * from Babar where availabledate between '$txtStartDate' and '$txtEndDate' order by availabledate");
+		// $query2= mysqli_query($connect ,"select  * from consultant where availabledate between '$txtStartDate' and '$txtEndDate' order by availabledate");
+		// $query3= mysqli_query($connect ,"select  * from beautician where availabledate between '$txtStartDate' and '$txtEndDate' order by availabledate");
+
+    $query1= mysqli_query($connect ,"select  * from Babar where availabledate between '$txtStartDate' order by availabledate");
+		$query2= mysqli_query($connect ,"select  * from consultant where availabledate between '$txtStartDate' order by availabledate");
+		$query3= mysqli_query($connect ,"select  * from beautician where availabledate between '$txtStartDate' order by availabledate");
 
 	$count1= mysqli_num_rows($query1);
 	$count2= mysqli_num_rows($query2);
@@ -511,10 +581,13 @@ if(isset ($_POST['search']))
 
 <body>
 
+<div class="container">
+  <div class="row"></div>
+</div>
 <br><b>
 <form method="post" action="L_servicesBack.php">
-Start Date &nbsp;&nbsp;&nbsp;:-&nbsp;&nbsp;&nbsp;<input type="date" name="txtStartDate">&nbsp;&nbsp;&nbsp;
-End Date&nbsp;&nbsp;&nbsp; :-&nbsp;&nbsp;&nbsp; <input type="date" name="txtEndDate">
+Select Date &nbsp;&nbsp;&nbsp;:-&nbsp;&nbsp;&nbsp;<input type="date" name="txtStartDate">&nbsp;&nbsp;&nbsp;
+Select Time&nbsp;&nbsp;&nbsp; :-&nbsp;&nbsp;&nbsp; <input type="time" name="txttime">
 <br ><br >
 <p>
 
@@ -525,13 +598,13 @@ End Date&nbsp;&nbsp;&nbsp; :-&nbsp;&nbsp;&nbsp; <input type="date" name="txtEndD
 <center>
 			<div style="background-color: #0a2e4f; color:white; width: 80%; clear:both">
 			<br />
-			<h3><u>Booking Details</u></h3>
+			<h3><u>selected a barbar, consultant or beautician</u></h3>
 			<div class="table-responsive">
         <div class= "container">
 				<table style = "color:white;"class="table table-bordered">
 					<tr>
 						<th width="40%">Details</th>						
-						<th width="20%">Price</th>
+						<!-- <th width="20%">Price</th> -->
 						<th width="15%">Action</th>
 					</tr>
 					<?php
@@ -545,7 +618,7 @@ End Date&nbsp;&nbsp;&nbsp; :-&nbsp;&nbsp;&nbsp; <input type="date" name="txtEndD
 					<tr>
 						<td>consultantportation Type :- <?php echo $values["vName"]; ?></td>
 						
-						<td>Rs <?php echo $values["fees"]; ?></td>
+						<!-- <td>Rs <?php echo $values["fees"]; ?></td> -->
 						
 						<td><a href="L_services.php?action=delete&id=<?php echo $values["consultantId"]; ?>"><span class="text-danger">Remove</span></a></td>
 					</tr>
@@ -565,7 +638,7 @@ End Date&nbsp;&nbsp;&nbsp; :-&nbsp;&nbsp;&nbsp; <input type="date" name="txtEndD
           <tr>
             <td>Babar Name :- <?php echo $values["gName"]; ?></td>
             
-            <td>Rs <?php echo $values["fees"]; ?></td>
+            <!-- <td>Rs <?php echo $values["fees"]; ?></td> -->
             
             <td><a href="L_services.php?action=delete&id=<?php echo $values["BabarId"]; ?>"><span class="text-danger">Remove</span></a></td>
           </tr><br>
@@ -586,7 +659,7 @@ End Date&nbsp;&nbsp;&nbsp; :-&nbsp;&nbsp;&nbsp; <input type="date" name="txtEndD
           <tr>
             <td>beautician Name :- <?php echo $values["dName"]; ?></td>
             
-            <td>Rs <?php echo $values["fees"]; ?></td>
+            <!-- <td>Rs <?php echo $values["fees"]; ?></td> -->
           
             <td><a href="L_services.php?action=delete&id=<?php echo $values["beauticianId"]; ?>"><span class="text-danger">Remove</span></a></td>
           </tr>
@@ -597,11 +670,11 @@ End Date&nbsp;&nbsp;&nbsp; :-&nbsp;&nbsp;&nbsp; <input type="date" name="txtEndD
           }
 
 					?>
-				<tr>
+				<!-- <tr>
             <td colspan="2" align="right">Total</td>
             <td align="right">Rs. <?php echo number_format($total, 2); ?></td>
             
-          </tr>
+          </tr> -->
          
             
         </table>
@@ -611,10 +684,33 @@ End Date&nbsp;&nbsp;&nbsp; :-&nbsp;&nbsp;&nbsp; <input type="date" name="txtEndD
 			<div class="text-right">
   
       
-           <a href = "L_CheckOutForm.php"> <button type="button" class="btn btn-success">Booking Form</button></a>
+           <!-- <a href = "L_CheckOutForm.php"> <button type="button" class="btn btn-success">Booking Form</button></a> -->
                     </div></center>
  <br />   </div>
 </div>
+<hr style=" border: solid 2px;margin-top:50px;width:60%"/>
+<div class="container m-3 p-3" style="background-color: #0a2e4f; color:white; width: 50%; clear:both">
+
+          <div class="row justify-content-center m-3">
+          <div  class="col text-center" >
+          
+            <h3>Total amount of payment - Rs.<?php echo $total_cat; ?>/=</h3>
+          </div>     
+          </div>
+          <div class="row justify-content-center">
+          <!-- <a href = "L_CheckOutForm.php?categoryList='<?php echo $category_array; ?>'"> <button type="button" class="btn btn-success">Booking Form</button></a> -->
+
+          <?php 
+          
+          echo "<a class='btn btn-success' href='L_CheckOutForm.php?" . http_build_query($category_array) . "'>Booking Form</a>";
+          
+          ?>
+          </div>
+</div>
+
+
+
+
 
 </b></h5></center></div>
 <div class="container">

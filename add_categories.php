@@ -306,76 +306,45 @@ transform: scale(1.15);
 
 
           </div>                    
-          <!--end search bar-->                                 
-            <div class="row  w3-margin" >
-              <div class ="container">
-              <table class="table table-striped table-bordered" id="example" style="width: 95%;">
-                <thead>
-                  <tr>
-                    <th>new Babar Id</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>NIC</th>
-                    <th>DOB</th>
-                    <th>Telephone Num</th>
-                    <th>Email</th>
-                    <th>Address</th>
-                    <th>nGcv</th>
-                    <th></th>   
-                  </tr>
+         
+          <div class="row justify-content-center">
+  <div style="background-color: #0a2e4f; color:white; width: 80%; clear:both">
+			<br />
+			<h3><u>Service Providers</u></h3>
+			<div class="table-responsive p-3">
+				<table style = "color:white;"class="table table-bordered">
+					<tr>
+						<th width="40%">Details</th>						
+						<th width="20%">Price</th>
+						<th width="15%">Action</th>
+					</tr>
 
-                    <?php 
-                      if(isset($_POST["submit"])) {
-$dbServername ="localhost";
-$dbUsername ="root";
-$dbPassword ="";
-$dbName ="ttgms";
+<?php 
 
-$conn = mysqli_connect($dbServername, $dbUsername,$dbPassword,$dbName);
+$query_fm = "SELECT * FROM category";
+$fms = mysqli_query($connect, $query_fm);
+if($fms){
+    while ($fm = mysqli_fetch_assoc($fms)) {
+?>
+<tr>
+        <td ><?php echo $fm['category_name'];?></td>
+        <td>Rs.<?php echo $fm['category_price'];?>/=</td>
+        <td class = "text-center" >
+                <form method="post" action="L_servicesBackCat.php">
+                <input type="hidden" name="category_id" value="1"></input>
+                <input type="hidden" name="user_id" value="1"></input>
+                    <button class="btn btn-danger" name="select_cat">remove</button>
+                </form>
+            </td>
+</tr>
 
-                        $sql = "SELECT * FROM newbabar";
+<?php
+    }
+  }
 
-                      $result = $conn -> query($sql);
-
-          
-                      if ($result->num_rows>0 ) {
-
-
-                        $i=0;
-
-
-                        while($row = $result->fetch_assoc()) {
-                            $i++;
-
-                          echo "<tr>";
-                              echo "<td>"; echo $row['newBabarId'];  echo "</td>";
-                              echo "<td>"; echo $row['nBabarFname'];  echo "</td>";
-                              echo "<td>"; echo $row['nBabarLname'];  echo "</td>";
-                              echo "<td>"; echo $row['nGnic'];  echo "</td>";
-                              echo "<td>"; echo $row['nGdob'];  echo "</td>";
-                              echo "<td>"; echo $row['nGcontactNo'];  echo "</td>";
-                              echo "<td>"; echo $row['nGmail'];  echo "</td>";
-                              echo "<td>"; echo $row['nGaddress'];  echo "</td>";
-                              echo "<td>"; echo $row['nGcv'];  echo "</td>";
-                              echo "<td>";
-                              echo "<button type='button' class='btn btn-danger'> <a style='color:white;text-decoration:none;'href='add_newBabarDelete.php?id={$row["newBabarId"]}'>Delete </a></button>";
-                              echo "</td>";
-                              echo "</tr>";
-                            }
-
-
-                      }
-
-
-                        }
-                      
-                    ?>
-                </thead>
-              </table>
-            </div>  
+?>
+    </table>
         </div>
-      </div>                </div></b></h5></center></div>
-
+  </div>
 </div>
-
 

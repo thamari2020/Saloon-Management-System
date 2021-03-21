@@ -291,7 +291,60 @@ $con = mysqli_connect($dbServername, $dbUsername,$dbPassword,$dbName);
     
 </div>
 <!--Nav Bar-->  
+<div class="container-fluid" style="box-shadow:3px 3px 3px 3px silver; margin: auto;
+    width: 80%;
+    padding: 10px;
+    background-color: 4B4872;margin-top:40px">
+<div class="row justify-content-center">
+  <!-- <div style="background-color: #0a2e4f; color:white; width: 80%; clear:both"> -->
+			<br />
+			<h2 style="color: white;"><u>Booking Details</u></h2>
+			<div class="table-responsive p-3">
+				<table style = "color:white;"class="table table-bordered">
+					<tr>
+						<th width="40%">Details</th>						
+						<th width="20%">Price</th>
+						<th width="15%">Action</th>
+					</tr>
 
+<?php 
+
+$total_cat = 0.0;
+$category_array = array();
+$query_fm = "SELECT * FROM category_selected";
+$fms = mysqli_query($con, $query_fm);
+if($fms){
+    while ($fm = mysqli_fetch_assoc($fms)) {
+      $total_cat = $total_cat + $fm['category_price'];
+      $category_array[] = $fm['category_selected'];
+?>
+<tr>
+        <td ><?php echo $fm['category_name'];?></td>
+        <td>Rs.<?php echo $fm['category_price'];?>/=</td>
+        <td class = "text-center" >
+                <form method="post" action="L_servicesBackCat.php">
+                <input type="hidden" name="category_id" value="1"></input>
+                <input type="hidden" name="user_id" value="1"></input>
+                    <button class="btn btn-danger" name="select_cat">remove</button>
+                </form>
+            </td>
+</tr>
+
+<?php
+    }
+  }
+
+?>
+
+<tr>
+						<th width="40%">Total</th>						
+						<th width="20%">Rs.<?php echo $total_cat; ?>/=</th>
+					</tr>
+            
+        </table>
+        </div>
+  </div>
+</div>
 <center><br>
 <div class="container-fluid" style="box-shadow:3px 3px 3px 3px silver; margin: auto;
     width: 80%;
@@ -299,14 +352,15 @@ $con = mysqli_connect($dbServername, $dbUsername,$dbPassword,$dbName);
     padding: 10px;
     background-color: 4B4872;">
 <br />
-<h2 style="color: white;"><u>Booking Details</u></h2>
+
+<!-- <h2 style="color: white;"><u>Booking Details</u></h2> -->
       
       <div class="table-responsive">
         <form   id="add_meal" method="POST" action="BookingBack.php" enctype="multipart/form-data">
         <table class="table table-bordered" style="color: white;">
           <tr style="color: white;">
             <th width="40%">Details</th>            
-            <th width="20%">Price</th>
+            <!-- <th width="20%">Price</th> -->
             <th width="15%">Action</th>
           </tr>
           <?php
@@ -323,7 +377,7 @@ $con = mysqli_connect($dbServername, $dbUsername,$dbPassword,$dbName);
           <tr>
             <td>Transportation Type :- <?php echo $values["vName"]; ?></td>
             
-            <td>Rs <?php echo $values["fees"]; ?></td>
+            <!-- <td>Rs <?php echo $values["fees"]; ?></td> -->
             
             <td><a href="L_CheckOutForm.php?action=delete&id=<?php echo $values["consultantId"]; ?>"><span class="text-danger">Remove</span></a></td>
           </tr>
@@ -347,7 +401,7 @@ $con = mysqli_connect($dbServername, $dbUsername,$dbPassword,$dbName);
           <tr>
             <td>Babar Name :- <?php echo $values["gName"]; ?></td>
             
-            <td>Rs <?php echo $values["fees"]; ?></td>
+            <!-- <td>Rs <?php echo $values["fees"]; ?></td> -->
             
             <td><a href="L_CheckOutForm.php?action=delete&id=<?php echo $values["BabarId"]; ?>"><span class="text-danger">Remove</span></a></td>
           </tr>
@@ -374,7 +428,7 @@ $con = mysqli_connect($dbServername, $dbUsername,$dbPassword,$dbName);
           <tr>
             <td>beautician Name :- <?php echo $values["dName"]; ?></td>
             
-            <td>Rs <?php echo $values["fees"]; ?></td>
+            <!-- <td>Rs <?php echo $values["fees"]; ?></td> -->
           
             <td><a href="L_CheckOutForm.php?action=delete&id=<?php echo $values["beauticianId"]; ?>"><span class="text-danger">Remove</span></a></td>
           </tr>
@@ -397,14 +451,22 @@ $con = mysqli_connect($dbServername, $dbUsername,$dbPassword,$dbName);
 
      <input class="w3-input w3-border" name="total" type="hidden" value="<?php echo ($total); ?> "  id="total"></div>  
      
-        <tr>
+        <!-- <tr>
             <td colspan="2" align="right">Total</td>
             <td align="right">Rs. <?php echo number_format($total, 2); ?></td>
             
-          </tr>
+          </tr> -->
          </table>
             <br >
-
+            
+            <div class="container">
+            <hr style="width:50%;border:solid 2px white" class="mb-3" />
+              <div class="row justify-content-center">
+              <h3 class="text-center text-light">Total Amount to pay - Rs.<?php echo $total_cat; ?>/=</h3>
+              </div>
+              <hr style="width:50%;border:solid 2px white" />
+            </div>
+            
 <div style="background-color: #E0E6F8; width: 90%; padding: 10px; "> <br><h1><u> Booking Form</u></h1>    <br /><br>
 <b>
 

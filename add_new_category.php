@@ -4,10 +4,6 @@ $connect = mysqli_connect("localhost", "root", "", "ttgms");
 if(!isset($_SESSION['email'])){
   header("location:./login.php");
 }
-?>
-
-<?php 
-
 
 ?>
 
@@ -309,20 +305,50 @@ transform: scale(1.15);
           </div>                    
           <!--end search bar-->                                 
             <div class="row  w3-margin" >
+<?php 
+
+
+$cat_name = "";
+$cat_price = 0.0;
+if(isset($_POST["add_new_cat"]))
+{
+
+    if(!empty($_POST["cat_name"]) && !empty($_POST["cat_price"])){
+        
+        $cat_name = $_POST["cat_name"];
+        $cat_price = $_POST["cat_price"];
+
+    $query2 = "INSERT INTO category(category_name,category_price) VALUES('{$cat_name}','{$cat_price}')";
+    $result = mysqli_query($connect,$query2);
+
+    if($result){
+        echo '<script type="text/javascript">
+        window.location = "http://localhost/salon/add_categories.php"
+   </script>';
+    }
+    } else {
+        echo "sasss";
+    }
+
+
+}
+
+
+?>
               <div class ="container">
               
-              <form class="col-6" action="add_new_categories.php" method="POST">
+              <form class="col-6" action="add_new_category.php" method="POST">
   <div class="form-group">
     <label for="exampleInputEmail1">Category name</label>
-    <input type="text" class="form-control" id="category_name" aria-describedby="emailHelp" placeholder="category name">
+    <input type="text" class="form-control" id="category_name" aria-describedby="emailHelp" name="cat_name" placeholder="category name">
     
   </div>
   <div class="form-group">
     <label for="exampleInputPassword1">Price</label>
-    <input type="text" class="form-control" id="category_price" placeholder="category price">
+    <input type="text" class="form-control" id="category_price" name="cat_price" placeholder="category price">
   </div>
 
-  <button type="submit" class="btn btn-primary">Add</button>
+  <button type="submit" class="btn btn-primary" name="add_new_cat">Add</button>
 </form>
             </div>  
         </div>

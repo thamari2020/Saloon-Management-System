@@ -469,7 +469,7 @@ $con = mysqli_connect($dbServername, $dbUsername,$dbPassword,$ddName);
 <center>
 <div style=" width: 80% ">
  
-                           <br/> <h1><u>Our Service</u></h1>
+                           <br/> <h1><u>Our Categories</u></h1>
                            
                     </div>
                     
@@ -496,134 +496,90 @@ if(isset ($_POST['search']))
 	$count1= mysqli_num_rows($query1);
 	$count2= mysqli_num_rows($query2);
 	$count3= mysqli_num_rows($query3);
-}  
-
-
-       
+}    
 ?>
 
 
-<!--Availble Babars of the travel agency-->
+<?php 
+
+if(isset($_POST["select_cat"]))
+{
+    // if(isset([$_POST["category_id"]])) {
+        $category_id  = $_POST['category_id'];
+        $user_id = $_POST['user_id'];
+        $category_name = $_POST['category_name'];
+        $category_price = $_POST['category_price'];
+        // echo $category_id;
+    // }
+
+    $query = "INSERT INTO category_selected(category_id,user_id,category_name,category_price, created_at) VALUES('{$category_id}','{$user_id}','{$category_name}','{$category_price}',NOW())";
+    $result = mysqli_query($con,$query);
+
+    if($result){
+        echo '<script type="text/javascript">
+        window.location = "http://localhost/salon/L_services.php"
+   </script>';
+    }
+}
+
+?>
+
+<div class="conatainer">
+    <div class="row justify-content-center m-3 p-3" style="background-color: #0a2e4f; color:white; width: 80%; clear:both">
+    <table  style="background-color: #0a2e4f; color:white;"class="table table-bordered">
+    <table style = "color:white;"class="table table-bordered">
+					<tr>
+						<th width="40%">Details</th>						
+						<th width="20%">Price</th>
+						<th width="15%">Action</th>
+					</tr>
+
+<?php 
+
+$query_fm = "SELECT * FROM category";
+$fms = mysqli_query($connect, $query_fm);
+if($fms){
+    while ($fm = mysqli_fetch_assoc($fms)) {
+?>
+<tr>
+        <td ><?php echo $fm['category_name'];?></td>
+        <td >Rs.<?php echo $fm['category_price'];?>/=</td>
+        <td class = "text-center" >
+                <form method="post" action="L_servicesBackCat.php">
+                <input type="hidden" name="category_id" value=<?php echo $fm['category_id']; ?>></input>
+                <input type="hidden" name="category_name" value=<?php echo $fm['category_name']; ?>></input>
+                <input type="hidden" name="category_price" value=<?php echo $fm['category_price']; ?>></input>
+                <input type="hidden" name="user_id" value="1" ></input>
+                    <button class="btn btn-success" name="select_cat">select</button>
+                </form>
+            </td>
+</tr>
 
 <?php
+    }
+  }
 
-if($count1 == "0")
-{
-	echo '<h2>Sorry Babars are not available in that day </h2>';
-	
-}
-else{
-	while($row = mysqli_fetch_array($query1))
-	{
-		
-		 ?>
-           <div class="col-md-6">
-        <form method="post" action="L_services.php?action=add&id=<?php echo $row["BabarId"]; ?>">
-          <div  style=" background-color:#0a2e4f; border-radius:5px; padding:16px;" align="center">
-<table style="width:100%"><tr><th><img src="in\upload\<?php echo $row["Image"]; ?>" class="img-responsive" /></th>
-            <th><font color="white"><h5 class="text-info"><?php echo $row["gName"]; ?><br>Rs<?php echo $row["fees"]; ?>  Per Hour
-              <br>Language :- <?php echo $row["language"]; ?> </font></h5></th></tr></table>        
+?>
+        <!-- <tr>
 
-
-            <input type="hidden" name="hidden_gName" value="<?php echo $row["gName"]; ?>" />
-            <input type="hidden" name="hidden_price" value="<?php echo $row["fees"]; ?>" />
-            <input type="hidden" name="hidden_language" value="<?php echo $row["language"]; ?>" />
-
-            <div class ="text-right"><input type="submit" name="add_to_cart2" style="margin-top:5px;" class="btn btn-success" value="Book Babar" onclick="aa()" /></div>
-
-          </div>
-        </form>
-      </div><br>
-      <?php
-          }
-        }
-      ?>
-                <!--end search bar-->                                 
-           
-      
-            </div>  
-        </div>
-      </div>                </div></h5></center></div>
-		 
-		  <!-- Available consultants of the agency-->
-	
-<?php
-
-if($count2 == "0")
-{
-	echo '<h2>Sorry consultant are not available in that day </h2>';
-	
-}
-else{
-         while($row = mysqli_fetch_array($query2))
-          {
-        ?>
-       <center> <div class="col-md-6">
-<form method="post" action="L_services.php?action=add&id=<?php echo $row["consultant"]; ?>">
-        <div  style="background-color: #0a2e4f; border-radius:5px; padding:16px;" align="center">
-            <table style="width:100%"><tr><th><img src="in\upload\<?php echo $row["Image"]; ?>" class="img-responsive" /></th>
-
-           <th></th><th> <h5 class="text-info"><font color="white"><?php echo $row["vName"]; ?><br>Rs<?php echo $row["fees"]; ?>  Per KM
-              <br>How Many People can travel:- <?php echo $row["howManyPeople"]; ?> 
-              <br>Description:- <?php echo $row["vDescription"]; ?></th></tr></table> 
- <input type="hidden" name="hidden_vName" value="<?php echo $row["vName"]; ?>" />
-
-            <input type="hidden" name="hidden_fees" value="<?php echo $row["fees"]; ?>" />
-<input type="hidden" name="hidden_people" value="<?php echo $row["howManyPeople"]; ?>" />
-<input type="hidden" name="hidden_description" value="<?php echo $row["vDescription"]; ?>" />
-            
-            <div class="text-right"><input type="submit" name="add_to_cart3" style="margin-top:5px;" class="btn btn-success" value="Book Consultant" onclick="aa()" /></div>
-
-          </div>
-        </form>
-      </div><br>
-      <?php
-          }
-        }
-      ?>
-                <!--end search bar-->                                 
-           
-      
-            </div>  
-        </div>
-      </div>                </div></h5></center></div>
-<?php
-
-if($count3 == "0")
-{
-	echo '<h2>Sorry beautician are not available in that day </h2>';
-	
-}
-else{
-	while($row = mysqli_fetch_array($query3))
-	{?>
-		
-     <center><div class="col-md-6">
-        <form method="post" action="L_services.php?action=add&id=<?php echo $row["beauticianId"]; ?>">
-          <div  style="background-color:#0a2e4f; border-radius:5px; padding:16px;" align="center">
-            <table style="width:100%"><tr><th><img src="in\upload\<?php echo $row["Image"]; ?>" class="img-responsive" /><br /></th>
-
-            <th><h5 class="text-info"><font color="white">Name : <?php echo $row["dName"]; ?><br>Price : Rs <?php echo $row["fees"]; ?>  Per Hour <br>Qualification : <?php echo $row["dqualification"]; ?></font></h5></th></tr></table>
-                   
-
-
-
-            <input type="hidden" name="hidden_dName" value="<?php echo $row["dName"]; ?>" />
-
-            <input type="hidden" name="hidden_price" value="<?php echo $row["fees"]; ?>" />
-
-
-            <div class="text-right"><input type="submit" name="add_to_cart1" style="margin-top:5px;" class="btn btn-success" value="Book beautician" onclick="aa()" /></div>
-
-          </div>
-        </form>
-      </div>
-      <br></center>
-      <?php
-          }
-        }
-
-      ?>
-		 
-
-</form>
+            <td name="category_id" value="1">1</td>
+            <td>Category Num</td>
+            <td>900</td>
+            <td class = "text-center" >
+                <form method="post" action="L_servicesBackCat.php">
+                <input type="hidden" name="category_id" value="1"></input>
+                <input type="hidden" name="category_price" value="300"></input>
+                <input type="hidden" name="category_name" value="category_two"></input>
+                    <button class="btn btn-success" name="select_cat">Select</button>
+                </form>
+            </td>
+        
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td class = "text-center" ><button class="btn btn-success">Select</button></td>
+        </tr> -->
+    </table>
+    </div>
+</div>
