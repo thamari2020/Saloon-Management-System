@@ -1,10 +1,20 @@
 <?php 
+ $login_id = "";
 session_start();
 $connect = mysqli_connect("localhost", "root", "", "ttgms");
 if(!isset($_SESSION['email'])){
   $email=$_SESSION['email'];
   header("location:./login.php");
 }
+
+
+$query_login = "select loginId from login where email = '{$_SESSION['email']}'";
+$login_res = mysqli_query($connect, $query_login);
+$row = mysqli_fetch_array($login_res);
+
+ $login_id = $row[0];
+
+//  echo $login_id;
 ?>
 <?php 
 
@@ -489,7 +499,7 @@ Select price&nbsp;&nbsp;&nbsp; :-&nbsp;&nbsp;&nbsp; <input type="number" name="t
 
 $total_cat = 0.0;
 $category_array = array();
-$query_fm = "SELECT * FROM category_selected";
+$query_fm = "SELECT * FROM category_selected INNER JOIN login on login.loginId = category_selected.user_id WHERE category_selected.user_id ='{$login_id}' ";
 $fms = mysqli_query($con, $query_fm);
 if($fms){
     while ($fm = mysqli_fetch_assoc($fms)) {

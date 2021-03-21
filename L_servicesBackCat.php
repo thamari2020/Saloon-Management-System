@@ -1,10 +1,21 @@
 <?php 
 session_start();
 $connect = mysqli_connect("localhost", "root", "", "ttgms");
+
+$login_id = "";
+
 if(!isset($_SESSION['email'])){
   $email=$_SESSION['email'];
   header("location:./login.php");
+
+
 }
+
+$query_login = "select loginId from login where email = '{$_SESSION['email']}'";
+$login_res = mysqli_query($connect, $query_login);
+$row = mysqli_fetch_array($login_res);
+
+ $login_id = $row[0];
 ?>
 <?php 
 
@@ -549,7 +560,7 @@ if($fms){
                 <input type="hidden" name="category_id" value=<?php echo $fm['category_id']; ?>></input>
                 <input type="hidden" name="category_name" value=<?php echo $fm['category_name']; ?>></input>
                 <input type="hidden" name="category_price" value=<?php echo $fm['category_price']; ?>></input>
-                <input type="hidden" name="user_id" value="1" ></input>
+                <input type="hidden" name="user_id" value=<?php echo $login_id ?> ></input>
                     <button class="btn btn-success" name="select_cat">select</button>
                 </form>
             </td>
